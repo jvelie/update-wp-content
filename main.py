@@ -2,6 +2,7 @@ import requests
 import json
 from dotenv import load_dotenv
 import os
+import urllib.parse
 
 load_dotenv()    
 
@@ -28,12 +29,14 @@ video_id = get_live_video_id(api_key, channel_id,)
 
 auth_value = os.getenv('AUTH_VALUE')
 url_value = os.getenv('URL_VALUE')
+url_encoded = urllib.parse.quote(url_value, safe=":/?&=")
+
 headers = {
     'Authorization': auth_value,
     'User-Agent': ''
 }
 
-response = requests.get(url_value, headers=headers)  
+response = requests.get(url_encoded, headers=headers)  
 data = response.json()
 
 #Replace 'rendered' key 
