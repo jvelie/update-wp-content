@@ -33,20 +33,25 @@ url_encoded = urllib.parse.quote(url_value, safe=":/?&=")
 
 headers = {
     'Authorization': auth_value,
-    'User-Agent': ''
+    'User-Agent': '',
+    'Content-Type': 'application/json'
 }
 
 response = requests.get(url_encoded, headers=headers)  
-data = response.json()
+
+if response.status_code == 200:
+    # If successful, parse the JSON response
+    data = response.json()
+else:
+    # Handle unsuccessful response
+    print(f"Unsuccessful request. Status code: {response.status_code}\nError message: {response.content}")
+
+
 
 #Replace 'rendered' key 
 if video_id:
     new_iframe = f'<iframe width="1080" height="566" src="https://www.youtube.com/embed/{video_id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" loading="lazy"></iframe>'
-    payload = {
-        "content": {
-            "rendered": new_iframe
-        }
-    }
+    payload = {"content": {"rendered": new_iframe}}
     # Convert dictionary
     json_payload = json.dumps(payload)
     # Update content 
